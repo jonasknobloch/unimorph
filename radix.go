@@ -135,7 +135,7 @@ func compress(t *tree.Tree) {
 func (r *Radix) Draw(stubs ...string) (int, error) {
 	t := (*tree.Tree)(r)
 
-	name := fmt.Sprintf("tree_%s.dot", strings.Join(stubs, "-"))
+	name := fmt.Sprintf("radix_%s.dot", strings.Join(stubs, "-"))
 
 	f, err := os.Create(filepath.Join(name))
 

@@ -5,6 +5,9 @@ import (
 	"github.com/jonasknobloch/jinn/pkg/tree"
 	"io"
 	"os"
+	"sort"
+	"strconv"
+	"time"
 )
 
 type Unimorph struct {
@@ -144,11 +147,25 @@ func (u *Unimorph) Split(form string, f func(radix *tree.Tree) bool) ([]string, 
 		return nil, false
 	}
 
+	if Config.SortRadixInput {
+		sort.Strings(forms)
+	}
+
 	r := NewRadix()
 
 	for _, form := range forms {
 		r.Insert(form)
 	}
+
+	defer func() {
+		if Config.CompressTrees {
+			r.Compress()
+		}
+
+		if Config.DrawTrees {
+			r.Draw(strconv.FormatInt(time.Now().Unix(), 10))
+		}
+	}()
 
 	return r.Split(form, f), true
 }
