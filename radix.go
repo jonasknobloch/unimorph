@@ -61,16 +61,17 @@ func split(t *tree.Tree, rs []rune, s []rune, r [][]rune, f func(t *tree.Tree) b
 			panic("invalid end of word")
 		}
 
-		if t.Height() > 2 {
+		ok := false
+
+		for _, c := range t.Children {
+			if c.Label == "$" {
+				ok = true
+				break
+			}
+		}
+
+		if !ok {
 			panic("unexpected end of word")
-		}
-
-		if len(t.Children) != 1 {
-			panic("invalid end of path")
-		}
-
-		if t.Children[0].Label != string('$') {
-			panic("unexpected end of path")
 		}
 
 		if len(s) != 0 {
@@ -78,6 +79,10 @@ func split(t *tree.Tree, rs []rune, s []rune, r [][]rune, f func(t *tree.Tree) b
 		}
 
 		return r
+	}
+
+	if len(rs) > 1 && len(t.Children) == 0 {
+		panic("unexpected end of path")
 	}
 
 	for _, c := range t.Children {
