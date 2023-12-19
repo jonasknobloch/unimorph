@@ -27,20 +27,22 @@ func Server(name string, split func(form string) []byte) error {
 			return err
 		}
 
-		defer c.Close()
+		go func(c net.Conn, split func(form string) []byte) {
+			defer c.Close()
 
-		buffer := make([]byte, 1024)
+			buffer := make([]byte, 1024)
 
-		n, err := c.Read(buffer)
+			n, err := c.Read(buffer)
 
-		if err != nil {
-			return err
-		}
+			if err != nil {
+				return
+			}
 
-		_, err = c.Write(split(string(buffer[:n])))
+			_, err = c.Write(split(string(buffer[:n])))
 
-		if err != nil {
-			return err
-		}
+			if err != nil {
+				return
+			}
+		}(c, split)
 	}
 }
