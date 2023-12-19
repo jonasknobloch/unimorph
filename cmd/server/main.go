@@ -22,16 +22,23 @@ func main() {
 
 	fmt.Println("Listing on socket", "/tmp/unimorph.sock")
 
+	hits := float64(0)
+	misses := float64(0)
+
 	err := unimorph.Server("/tmp/unimorph.sock", func(form string) []byte {
 		split, ok := u.Split(form, unimorph.SplitSiblings(2))
 
 		if !ok {
-			fmt.Printf("%v\t%s\n", ok, form)
+			misses++
+
+			fmt.Printf("%v\t%f\t%s\n", ok, hits/(hits+misses), form)
 
 			return []byte(form)
 		}
 
-		fmt.Printf("%v\t%s\n", ok, strings.Join(split, "#"))
+		hits++
+
+		fmt.Printf("%v\t%f\t%s\n", ok, hits/(hits+misses), strings.Join(split, "#"))
 
 		return []byte(strings.Join(split, "#"))
 	})
