@@ -22,7 +22,7 @@ func main() {
 			return []byte(form)
 		}
 
-		return []byte(strings.Join(split, " "))
+		return []byte(strings.Join(split, "#"))
 	})
 
 	if err != nil {
