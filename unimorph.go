@@ -141,7 +141,23 @@ func (u *Unimorph) Split(form string, f func(radix *tree.Tree) bool) ([]string, 
 		return nil, false
 	}
 
-	forms, ok := u.Inflect(lemmas[0], "")
+	var forms []string
+
+	for _, lemma := range lemmas {
+		fs, ok := u.Inflect(lemma, "")
+
+		if !ok {
+			continue
+		}
+
+		if forms == nil {
+			forms = fs
+
+			continue
+		}
+
+		forms = append(forms, fs...)
+	}
 
 	if !ok {
 		return nil, false
