@@ -90,7 +90,7 @@ func split(t *tree.Tree, rs []rune, s []rune, r [][]rune, f func(t *tree.Tree) b
 			s = append(s, rs[0])
 
 			if f(c) {
-				r = append(r, s)    // add rune to substring
+				r = append(r, s)    // add substring to result
 				s = make([]rune, 0) // reset substring
 			}
 
